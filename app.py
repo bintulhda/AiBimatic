@@ -1,7 +1,7 @@
 
 """
-Smart Health Tracker - Hackathon Project
-A comprehensive health prediction and analysis tool using ML and rule-based logic.
+HealthGuard AI - Smart Health Tracker
+A comprehensive health prediction and analysis tool with Dark Neon Glassmorphism Design.
 """
 
 import streamlit as st
@@ -18,212 +18,427 @@ import io
 # ============================================================================
 
 st.set_page_config(
-    page_title="🏥 Smart Health Tracker",
-    page_icon="🩺",
+    page_title="HealthGuard AI",
+    page_icon="🧠",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
 # ============================================================================
-# DARK MODE INITIALIZATION
+# DARK NEON GLASSMORPHISM THEME
 # ============================================================================
 
-if 'dark_mode' not in st.session_state:
-    st.session_state.dark_mode = False
+def apply_glassmorphism_theme():
+    """Apply Dark Neon Glassmorphism CSS Theme"""
+    css = """
+    <style>
+    /* ========== ROOT & PAGE STYLING ========== */
+    html, body, [data-testid="stAppViewContainer"] {
+        background: linear-gradient(135deg, #0a0e27 0%, #1a1c3a 50%, #0f3a4a 100%) !important;
+        background-attachment: fixed !important;
+        background-repeat: no-repeat !important;
+        color: #ffffff !important;
+    }
+    
+    .stApp {
+        background: transparent !important;
+    }
+    
+    /* ========== SIDEBAR STYLING ========== */
+    [data-testid="stSidebar"] {
+        background: rgba(15, 23, 42, 0.4) !important;
+        backdrop-filter: blur(10px) !important;
+        border-right: 1px solid rgba(0, 242, 255, 0.1) !important;
+    }
+    
+    [data-testid="stSidebarNav"] {
+        background: transparent !important;
+    }
+    
+    /* ========== SIDEBAR TEXT ========== */
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3,
+    [data-testid="stSidebar"] label {
+        color: #ffffff !important;
+        text-shadow: 0 0 10px rgba(0, 242, 255, 0.5) !important;
+    }
+    
+    /* ========== MAIN CONTENT AREA ========== */
+    [data-testid="stMainBlockContainer"] {
+        padding: 40px 20px !important;
+    }
+    
+    /* ========== HEADERS & TITLES ========== */
+    h1, h2, h3, h4, h5, h6 {
+        color: #ffffff !important;
+        text-shadow: 0 0 15px rgba(0, 242, 255, 0.6) !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.5px !important;
+    }
+    
+    .main-title {
+        text-align: center;
+        background: rgba(0, 242, 255, 0.05) !important;
+        backdrop-filter: blur(10px) !important;
+        padding: 40px 20px !important;
+        border-radius: 20px !important;
+        border: 1px solid rgba(0, 242, 255, 0.2) !important;
+        box-shadow: 0 8px 32px rgba(0, 242, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+        margin-bottom: 30px !important;
+        font-size: 3em !important;
+    }
+    
+    /* ========== GLASS MORPHISM CARDS ========== */
+    .glass-card {
+        background: rgba(10, 25, 47, 0.5) !important;
+        backdrop-filter: blur(10px) !important;
+        border-radius: 20px !important;
+        border: 1px solid rgba(0, 242, 255, 0.15) !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+        padding: 25px !important;
+        color: #ffffff !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .glass-card:hover {
+        background: rgba(10, 25, 47, 0.7) !important;
+        border-color: rgba(0, 242, 255, 0.3) !important;
+        box-shadow: 0 8px 32px rgba(0, 242, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+        transform: translateY(-5px) !important;
+    }
+    
+    /* ========== STATUS BOXES ========== */
+    .success-box {
+        background: rgba(76, 175, 80, 0.08) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(76, 175, 80, 0.3) !important;
+        border-left: 4px solid #4caf50 !important;
+        border-radius: 15px !important;
+        padding: 20px !important;
+        color: #81c784 !important;
+        box-shadow: 0 8px 32px rgba(76, 175, 80, 0.1) !important;
+    }
+    
+    .warning-box {
+        background: rgba(255, 152, 0, 0.08) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(255, 152, 0, 0.3) !important;
+        border-left: 4px solid #ff9800 !important;
+        border-radius: 15px !important;
+        padding: 20px !important;
+        color: #ffb74d !important;
+        box-shadow: 0 8px 32px rgba(255, 152, 0, 0.1) !important;
+    }
+    
+    .danger-box {
+        background: rgba(244, 67, 54, 0.08) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(244, 67, 54, 0.3) !important;
+        border-left: 4px solid #f44336 !important;
+        border-radius: 15px !important;
+        padding: 20px !important;
+        color: #ef5350 !important;
+        box-shadow: 0 8px 32px rgba(244, 67, 54, 0.1) !important;
+    }
+    
+    .info-box {
+        background: rgba(0, 242, 255, 0.08) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(0, 242, 255, 0.3) !important;
+        border-left: 4px solid #00f2ff !important;
+        border-radius: 15px !important;
+        padding: 20px !important;
+        color: #64b5f6 !important;
+        box-shadow: 0 8px 32px rgba(0, 242, 255, 0.1) !important;
+    }
+    
+    .feature-card {
+        background: rgba(10, 25, 47, 0.4) !important;
+        backdrop-filter: blur(10px) !important;
+        border-radius: 15px !important;
+        border: 1px solid rgba(0, 242, 255, 0.15) !important;
+        padding: 20px !important;
+        color: #ffffff !important;
+        box-shadow: 0 8px 32px rgba(0, 242, 255, 0.05) !important;
+    }
+    
+    /* ========== INPUT ELEMENTS ========== */
+    .stTextInput > div > div > input,
+    .stNumberInput > div > div > input,
+    .stSelectbox > div > div,
+    .stSlider > div > div > div,
+    input[type="text"],
+    input[type="number"],
+    select {
+        background: rgba(255, 255, 255, 0.05) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(0, 242, 255, 0.2) !important;
+        border-radius: 10px !important;
+        color: #ffffff !important;
+        padding: 10px 15px !important;
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    .stTextInput > div > div > input:focus,
+    .stNumberInput > div > div > input:focus,
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+        border-color: #00f2ff !important;
+        outline: none !important;
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 242, 255, 0.3) !important;
+    }
+    
+    /* ========== BUTTONS ========== */
+    .stButton > button {
+        background: linear-gradient(135deg, #00f2ff 0%, #0088cc 100%) !important;
+        color: #000000 !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 12px 24px !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 15px rgba(0, 242, 255, 0.3) !important;
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 6px 20px rgba(0, 242, 255, 0.5), 0 0 20px rgba(0, 242, 255, 0.3) !important;
+        background: linear-gradient(135deg, #00f2ff 0%, #00ccff 100%) !important;
+    }
+    
+    .stButton > button:active {
+        transform: translateY(-1px) !important;
+    }
+    
+    /* ========== NEON ACCENT BUTTON ========== */
+    .neon-button {
+        background: linear-gradient(135deg, #ff0055 0%, #ff6699 100%) !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(255, 0, 85, 0.5) !important;
+        border-radius: 10px !important;
+        padding: 12px 24px !important;
+        font-weight: 600 !important;
+        box-shadow: 0 4px 15px rgba(255, 0, 85, 0.4) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .neon-button:hover {
+        box-shadow: 0 6px 20px rgba(255, 0, 85, 0.6), 0 0 20px rgba(255, 0, 85, 0.4) !important;
+        transform: translateY(-3px) !important;
+    }
+    
+    /* ========== METRICS & STATS ========== */
+    .stMetric {
+        background: rgba(0, 242, 255, 0.05) !important;
+        backdrop-filter: blur(10px) !important;
+        border-radius: 15px !important;
+        border: 1px solid rgba(0, 242, 255, 0.15) !important;
+        padding: 20px !important;
+        box-shadow: 0 4px 15px rgba(0, 242, 255, 0.1) !important;
+    }
+    
+    .stMetric > div > div > h3,
+    .stMetric > div > label {
+        color: #ffffff !important;
+        text-shadow: 0 0 10px rgba(0, 242, 255, 0.5) !important;
+    }
+    
+    .stMetric > div > div > p {
+        color: #00f2ff !important;
+        font-weight: 600 !important;
+    }
+    
+    /* ========== TABS ========== */
+    .stTabs [data-baseweb="tab-list"] {
+        background: rgba(10, 25, 47, 0.3) !important;
+        border-bottom: 1px solid rgba(0, 242, 255, 0.2) !important;
+        backdrop-filter: blur(10px) !important;
+    }
+    
+    .stTabs [data-baseweb="tab-list"] button {
+        color: #b0b0b0 !important;
+        background: transparent !important;
+        border-radius: 10px 10px 0 0 !important;
+        border: none !important;
+        padding: 15px 20px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .stTabs [data-baseweb="tab-list"] button:hover {
+        color: #00f2ff !important;
+        background: rgba(0, 242, 255, 0.1) !important;
+    }
+    
+    .stTabs [data-baseweb="tab-list"] button[aria-selected="true"] {
+        color: #00f2ff !important;
+        background: rgba(0, 242, 255, 0.15) !important;
+        border-bottom: 3px solid #00f2ff !important;
+        box-shadow: 0 -4px 15px rgba(0, 242, 255, 0.2) !important;
+    }
+    
+    .stTabs [data-baseweb="tab-content"] {
+        background: rgba(10, 25, 47, 0.3) !important;
+        border-radius: 0 10px 10px 10px !important;
+        backdrop-filter: blur(10px) !important;
+    }
+    
+    /* ========== RADIO & CHECKBOX ========== */
+    .stRadio > div {
+        background: rgba(10, 25, 47, 0.3) !important;
+        backdrop-filter: blur(10px) !important;
+        border-radius: 10px !important;
+        border: 1px solid rgba(0, 242, 255, 0.15) !important;
+        padding: 10px !important;
+    }
+    
+    .stRadio > div > label {
+        color: #ffffff !important;
+        padding: 10px !important;
+        border-radius: 8px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .stRadio > div > label:hover {
+        background: rgba(0, 242, 255, 0.1) !important;
+    }
+    
+    .stCheckbox > label {
+        color: #ffffff !important;
+    }
+    
+    /* ========== GRID LAYOUT ========== */
+    .stats-grid {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+        gap: 20px !important;
+        margin: 20px 0 !important;
+    }
+    
+    .stat-item {
+        background: rgba(0, 242, 255, 0.08) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(0, 242, 255, 0.2) !important;
+        border-radius: 15px !important;
+        padding: 20px !important;
+        text-align: center !important;
+        color: #ffffff !important;
+        box-shadow: 0 8px 32px rgba(0, 242, 255, 0.1) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .stat-item:hover {
+        border-color: #00f2ff !important;
+        box-shadow: 0 8px 32px rgba(0, 242, 255, 0.2), 0 0 20px rgba(0, 242, 255, 0.15) !important;
+        transform: translateY(-5px) !important;
+    }
+    
+    /* ========== HERO SECTION ========== */
+    .hero-section {
+        background: rgba(10, 25, 47, 0.5) !important;
+        backdrop-filter: blur(20px) !important;
+        border-radius: 25px !important;
+        border: 2px solid rgba(0, 242, 255, 0.2) !important;
+        padding: 50px 40px !important;
+        margin: 30px 0 !important;
+        text-align: center !important;
+        box-shadow: 0 8px 32px rgba(0, 242, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .hero-section h1 {
+        font-size: 2.5em !important;
+        margin: 10px 0 !important;
+        background: linear-gradient(135deg, #00f2ff 0%, #ff0055 100%) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        background-clip: text !important;
+    }
+    
+    .hero-section p {
+        font-size: 1.1em !important;
+        color: #b0b0b0 !important;
+        margin: 15px 0 !important;
+    }
+    
+    /* ========== FEATURE CARD BUTTONS ========== */
+    .feature-button {
+        background: rgba(10, 25, 47, 0.4) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(0, 242, 255, 0.2) !important;
+        border-radius: 15px !important;
+        padding: 20px !important;
+        color: #ffffff !important;
+        text-align: center !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 15px rgba(0, 242, 255, 0.1) !important;
+    }
+    
+    .feature-button:hover {
+        background: rgba(0, 242, 255, 0.1) !important;
+        border-color: #00f2ff !important;
+        box-shadow: 0 8px 32px rgba(0, 242, 255, 0.2), 0 0 20px rgba(0, 242, 255, 0.15) !important;
+        transform: translateY(-5px) !important;
+    }
+    
+    /* ========== TEXT STYLING ========== */
+    p, span, li {
+        color: #ffffff !important;
+    }
+    
+    a {
+        color: #00f2ff !important;
+        text-decoration: none !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    a:hover {
+        color: #ff0055 !important;
+        text-shadow: 0 0 10px rgba(0, 242, 255, 0.5) !important;
+    }
+    
+    /* ========== DATAFRAME & TABLE ========== */
+    .stDataFrame {
+        background: rgba(10, 25, 47, 0.3) !important;
+        border-radius: 10px !important;
+        overflow: hidden !important;
+    }
+    
+    /* ========== MATPLOTLIB CHARTS ========== */
+    .stPlotlyChart {
+        background: rgba(10, 25, 47, 0.2) !important;
+        border-radius: 10px !important;
+        padding: 10px !important;
+    }
+    
+    /* ========== SCROLLBAR ========== */
+    ::-webkit-scrollbar {
+        width: 10px !important;
+        height: 10px !important;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: rgba(10, 25, 47, 0.3) !important;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: rgba(0, 242, 255, 0.5) !important;
+        border-radius: 5px !important;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 242, 255, 0.8) !important;
+    }
+    
+    </style>
+    """
+    st.markdown(css, unsafe_allow_html=True)
 
-# Dynamic CSS for light and dark modes
-def get_css_theme():
-    if st.session_state.dark_mode:
-        return """
-        <style>
-        :root {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2d2d2d;
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --accent: #00d4ff;
-            --success: #4caf50;
-            --warning: #ff9800;
-            --danger: #f44336;
-            --info: #2196f3;
-        }
-        
-        .main-title {
-            text-align: center;
-            color: #00d4ff;
-            margin-bottom: 2rem;
-            font-size: 2.5em;
-            font-weight: bold;
-            text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
-        }
-        
-        .metric-card {
-            background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 10px 0;
-            border: 1px solid #404040;
-            color: #ffffff;
-        }
-        
-        .warning-box {
-            background-color: rgba(255, 152, 0, 0.1);
-            padding: 15px;
-            border-left: 4px solid #ff9800;
-            border-radius: 5px;
-            margin: 10px 0;
-            color: #ffb74d;
-        }
-        
-        .success-box {
-            background-color: rgba(76, 175, 80, 0.1);
-            padding: 15px;
-            border-left: 4px solid #4caf50;
-            border-radius: 5px;
-            margin: 10px 0;
-            color: #81c784;
-        }
-        
-        .danger-box {
-            background-color: rgba(244, 67, 54, 0.1);
-            padding: 15px;
-            border-left: 4px solid #f44336;
-            border-radius: 5px;
-            margin: 10px 0;
-            color: #ef5350;
-        }
-        
-        .info-box {
-            background-color: rgba(33, 150, 243, 0.1);
-            padding: 15px;
-            border-left: 4px solid #2196f3;
-            border-radius: 5px;
-            margin: 10px 0;
-            color: #64b5f6;
-        }
-        
-        .feature-card {
-            background: linear-gradient(135deg, #2d2d2d 0%, #253238 100%);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 15px 0;
-            border: 1px solid #00d4ff;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
-            color: #ffffff;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        .stat-item {
-            background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            color: white;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-        </style>
-        """
-    else:
-        return """
-        <style>
-        :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f5f5f5;
-            --text-primary: #000000;
-            --text-secondary: #666666;
-            --accent: #1f77b4;
-            --success: #28a745;
-            --warning: #ffc107;
-            --danger: #dc3545;
-            --info: #17a2b8;
-        }
-        
-        .main-title {
-            text-align: center;
-            color: #1f77b4;
-            margin-bottom: 2rem;
-            font-size: 2.5em;
-            font-weight: bold;
-        }
-        
-        .metric-card {
-            background-color: #f0f2f6;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 10px 0;
-            border: 1px solid #e0e0e0;
-        }
-        
-        .warning-box {
-            background-color: #fff3cd;
-            padding: 15px;
-            border-left: 4px solid #ffc107;
-            border-radius: 5px;
-            margin: 10px 0;
-            color: #856404;
-        }
-        
-        .success-box {
-            background-color: #d4edda;
-            padding: 15px;
-            border-left: 4px solid #28a745;
-            border-radius: 5px;
-            margin: 10px 0;
-            color: #155724;
-        }
-        
-        .danger-box {
-            background-color: #f8d7da;
-            padding: 15px;
-            border-left: 4px solid #dc3545;
-            border-radius: 5px;
-            margin: 10px 0;
-            color: #721c24;
-        }
-        
-        .info-box {
-            background-color: #d1ecf1;
-            padding: 15px;
-            border-left: 4px solid #17a2b8;
-            border-radius: 5px;
-            margin: 10px 0;
-            color: #0c5460;
-        }
-        
-        .feature-card {
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 15px 0;
-            border: 2px solid #1f77b4;
-            box-shadow: 0 4px 15px rgba(31, 119, 180, 0.1);
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        .stat-item {
-            background: linear-gradient(135deg, #1f77b4 0%, #1464a8 100%);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            color: white;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-        </style>
-        """
-
-st.markdown(get_css_theme(), unsafe_allow_html=True)
+# Apply the glassmorphism theme
+apply_glassmorphism_theme()
 
 # ============================================================================
 # MODEL TRAINING & INITIALIZATION
@@ -441,110 +656,218 @@ def calculate_calorie_needs(weight, height, age, gender, activity_level):
 
 
 # ============================================================================
-# SIDEBAR NAVIGATION & DARK MODE TOGGLE
+# SIDEBAR NAVIGATION & BRANDING
 # ============================================================================
 
-st.sidebar.markdown("## 🏥 Navigation")
-
-# Dark mode toggle
-col1, col2 = st.sidebar.columns([3, 1])
-with col1:
-    st.sidebar.markdown("**Dark Mode**")
-with col2:
-    if st.sidebar.button("🌙" if not st.session_state.dark_mode else "☀️", key="theme_toggle"):
-        st.session_state.dark_mode = not st.session_state.dark_mode
-        st.rerun()
+# HealthGuard AI Sidebar Header
+st.sidebar.markdown("""
+<div style='text-align: center; padding: 20px 0; margin-bottom: 20px;'>
+    <h1 style='font-size: 2em; margin: 0; background: linear-gradient(135deg, #00f2ff 0%, #ff0055 100%); 
+               -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+               background-clip: text; text-shadow: 0 0 20px rgba(0, 242, 255, 0.5);'>
+        🧠 HealthGuard AI
+    </h1>
+    <p style='margin: 5px 0; color: #00f2ff; font-size: 0.85em; text-shadow: 0 0 10px rgba(0, 242, 255, 0.3);'>
+        Your AI Health Companion
+    </p>
+</div>
+""", unsafe_allow_html=True)
 
 st.sidebar.markdown("---")
+
+# Navigation
+st.sidebar.markdown('<p style="color: #00f2ff; font-weight: 600; text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);">📍 NAVIGATION</p>', unsafe_allow_html=True)
 
 page = st.sidebar.radio(
     "Select a feature:",
     ["🏠 Home", "🩺 Diabetes Predictor", "❤️ Blood Pressure Analysis", 
      "⚖️ BMI Calculator", "📊 Dashboard", "🏃 Activity Tracker", 
-     "💧 Water Intake", "😴 Sleep Tracker", "🔥 Calorie Calculator"]
+     "💧 Water Intake", "😴 Sleep Tracker", "🔥 Calorie Calculator"],
+    label_visibility="collapsed"
 )
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("""
-### 🎯 Quick Stats
-Track your daily health metrics:
-- **💧 Water Intake**: Stay hydrated!
-- **🏃 Exercise**: 150 min/week goal
-- **😴 Sleep**: 7-9 hours recommended
-- **🔥 Calories**: Personalized needs
+<div style='background: rgba(0, 242, 255, 0.05); backdrop-filter: blur(10px); 
+            border: 1px solid rgba(0, 242, 255, 0.15); border-radius: 10px; 
+            padding: 15px; margin: 15px 0;'>
+    <h4 style='color: #00f2ff; text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); margin-top: 0;'>🎯 Today's Goals</h4>
+    <ul style='margin: 10px 0; padding-left: 20px; font-size: 0.9em;'>
+        <li>💧 Hydration: 8 glasses</li>
+        <li>🏃 Exercise: 150 minutes</li>
+        <li>😴 Sleep: 8 hours</li>
+        <li>❤️ Monitor: BP & Glucose</li>
+    </ul>
+</div>
 
-### About This App
-This Smart Health Tracker helps you monitor your health using:
-- **Machine Learning** for diabetes prediction
-- **Rule-based Logic** for BP analysis
-- **Data Visualization** for insights
-- **Activity Tracking** for wellness
+<div style='background: rgba(76, 175, 80, 0.05); backdrop-filter: blur(10px); 
+            border: 1px solid rgba(76, 175, 80, 0.15); border-radius: 10px; 
+            padding: 15px; margin: 15px 0;'>
+    <h4 style='color: #4caf50; margin-top: 0;'>✨ Features</h4>
+    <ul style='margin: 10px 0; padding-left: 20px; font-size: 0.85em;'>
+        <li>ML Diabetes Prediction</li>
+        <li>Real-time BP Analysis</li>
+        <li>Activity Tracking</li>
+        <li>Health Reports</li>
+    </ul>
+</div>
 
-⚠️ **Disclaimer:** This is NOT medical advice. Always consult a healthcare professional.
-""")
+<p style='color: #b0b0b0; font-size: 0.8em; text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(0, 242, 255, 0.1);'>
+⚠️ <b>Disclaimer:</b> This is NOT medical advice.<br>Always consult a healthcare professional.
+</p>
+""", unsafe_allow_html=True)
 
 # ============================================================================
 # HOME PAGE
 # ============================================================================
 
 if page == "🏠 Home":
-    st.markdown("<h1 class='main-title'>🏥 Smart Health Tracker</h1>", unsafe_allow_html=True)
+    # Hero Section
+    st.markdown("""
+    <div class='hero-section'>
+        <h1>Welcome back, User 👋</h1>
+        <p>Your AI health companion is ready to help you achieve optimal wellness</p>
+        <hr style='border: 1px solid rgba(0, 242, 255, 0.2); margin: 20px 0;'>
+        <p style='color: #00f2ff; font-size: 0.95em;'>
+            🧠 Powered by Advanced ML | 📊 Real-time Analysis | 🔒 Your Privacy Protected
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    col1, col2, col3 = st.columns(3)
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Feature Cards Grid
+    st.markdown('<h2 style="text-align: center; color: #ffffff; margin: 30px 0; text-shadow: 0 0 15px rgba(0, 242, 255, 0.6);">✨ Core Features</h2>', unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns(3, gap="medium")
     
     with col1:
-        st.info("👨‍⚕️ **Diabetes Predictor**\nML-based prediction using patient data")
+        st.markdown("""
+        <div class='glass-card' style='text-align: center; cursor: pointer; transition: all 0.3s ease;'>
+            <div style='font-size: 3em; margin-bottom: 15px;'>🩺</div>
+            <h3 style='color: #00f2ff; margin-top: 0; text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);'>
+                Diabetes Predictor
+            </h3>
+            <p style='color: #b0b0b0; font-size: 0.95em;'>
+                AI-powered risk assessment using machine learning
+            </p>
+            <div style='margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0, 242, 255, 0.1);'>
+                <span style='color: #00f2ff; font-weight: 600;'>→ Analyze Now</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     
     with col2:
-        st.info("❤️ **BP Analysis**\nBlood pressure categorization & advice")
+        st.markdown("""
+        <div class='glass-card' style='text-align: center; cursor: pointer; transition: all 0.3s ease;'>
+            <div style='font-size: 3em; margin-bottom: 15px;'>❤️</div>
+            <h3 style='color: #ff0055; margin-top: 0; text-shadow: 0 0 10px rgba(255, 0, 85, 0.5);'>
+                Blood Pressure
+            </h3>
+            <p style='color: #b0b0b0; font-size: 0.95em;'>
+                Real-time BP monitoring & instant categorization
+            </p>
+            <div style='margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0, 242, 255, 0.1);'>
+                <span style='color: #ff0055; font-weight: 600;'>→ Check Now</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     
     with col3:
-        st.info("⚖️ **BMI Calculator**\nWeight classification & recommendations")
+        st.markdown("""
+        <div class='glass-card' style='text-align: center; cursor: pointer; transition: all 0.3s ease;'>
+            <div style='font-size: 3em; margin-bottom: 15px;'>⚖️</div>
+            <h3 style='color: #00f2ff; margin-top: 0; text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);'>
+                BMI Calculator
+            </h3>
+            <p style='color: #b0b0b0; font-size: 0.95em;'>
+                Calculate & track your body mass index
+            </p>
+            <div style='margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0, 242, 255, 0.1);'>
+                <span style='color: #00f2ff; font-weight: 600;'>→ Calculate</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     
-    st.markdown("---")
+    st.markdown("<br><br>", unsafe_allow_html=True)
     
+    # Additional Features
+    st.markdown('<h2 style="text-align: center; color: #ffffff; margin: 30px 0; text-shadow: 0 0 15px rgba(0, 242, 255, 0.6);">🚀 Additional Tools</h2>', unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns(3, gap="medium")
+    
+    with col1:
+        st.markdown("""
+        <div class='feature-card' style='text-align: center;'>
+            <div style='font-size: 2em; margin-bottom: 10px;'>🏃</div>
+            <h4 style='color: #00f2ff; margin: 5px 0;'>Activity Tracker</h4>
+            <p style='color: #b0b0b0; font-size: 0.9em; margin: 0;'>150 min/week goal</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div class='feature-card' style='text-align: center;'>
+            <div style='font-size: 2em; margin-bottom: 10px;'>💧</div>
+            <h4 style='color: #00f2ff; margin: 5px 0;'>Water Intake</h4>
+            <p style='color: #b0b0b0; font-size: 0.9em; margin: 0;'>Stay hydrated</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown("""
+        <div class='feature-card' style='text-align: center;'>
+            <div style='font-size: 2em; margin-bottom: 10px;'>😴</div>
+            <h4 style='color: #00f2ff; margin: 5px 0;'>Sleep Tracker</h4>
+            <p style='color: #b0b0b0; font-size: 0.9em; margin: 0;'>7-9 hours recommended</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # Info Boxes
+    col1, col2 = st.columns(2, gap="large")
+    
+    with col1:
+        st.markdown("""
+        <div class='info-box'>
+            <h4 style='margin-top: 0;'>🎯 How It Works</h4>
+            <ol style='padding-left: 20px; margin: 10px 0;'>
+                <li>Input your health metrics</li>
+                <li>AI analyzes your data instantly</li>
+                <li>Get personalized insights</li>
+                <li>Download your health report</li>
+            </ol>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div class='success-box'>
+            <h4 style='margin-top: 0;'>✅ Key Features</h4>
+            <ul style='padding-left: 20px; margin: 10px 0;'>
+                <li>Machine Learning Predictions</li>
+                <li>Real-time Health Analysis</li>
+                <li>Downloadable Reports</li>
+                <li>Data Visualization</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    
+    # Warning
     st.markdown("""
-    ## Welcome to Smart Health Tracker! 👋
-    
-    This application is designed to help you monitor and understand your health metrics better.
-    
-    ### What You Can Do:
-    
-    1. **Predict Diabetes Risk** 🩺
-       - Input your health metrics
-       - Get an AI-powered diabetes prediction with confidence scores
-       - Compare your glucose levels with healthy averages
-    
-    2. **Analyze Blood Pressure** ❤️
-       - Enter your systolic and diastolic readings
-       - Get instant categorization (Normal, Elevated, Stage 1, Stage 2)
-       - Receive personalized health advice
-    
-    3. **Calculate BMI** ⚖️
-       - Find your Body Mass Index
-       - Get weight category classification
-       - Receive lifestyle recommendations
-    
-    4. **Download Reports** 📋
-       - Generate personalized health reports
-       - Download as text files for your records
-    
-    ### Quick Tips:
-    - ✅ Keep your readings handy when using the predictors
-    - ✅ Take multiple readings for accuracy
-    - ✅ Consult a doctor for serious concerns
-    - ✅ Use this tool for general awareness, not diagnosis
-    
-    ---
-    """)
-    
-    st.warning("""
-    ⚠️ **Important Disclaimer**
-    
-    This application is for educational and informational purposes only. 
-    The predictions and analyses provided are NOT medical diagnoses. 
-    Please consult a qualified healthcare professional for accurate medical advice.
-    """)
+    <div class='danger-box'>
+        <h4 style='margin-top: 0;'>⚠️ Medical Disclaimer</h4>
+        <p style='margin: 10px 0;'>
+            This application is for informational purposes only and does <b>NOT</b> constitute medical advice.
+            The predictions and analyses provided are not professional medical diagnoses.
+            <b>Always consult a qualified healthcare professional</b> for accurate medical guidance.
+            In case of medical emergency, seek immediate medical attention.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # ============================================================================
 # DIABETES PREDICTOR PAGE
