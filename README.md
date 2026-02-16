@@ -1,8 +1,21 @@
-# 🏥 Smart Health Tracker - Hackathon Project
+# 🏥 Smart Health Tracker - Hackathon Project (v2.0 Enhanced)
 
-A comprehensive health prediction and analysis application built with Python, Streamlit, and Machine Learning.
+A comprehensive health prediction and analysis application built with Python, Streamlit, Machine Learning, and Dark Mode support.
 
-## 📋 Features
+## 🌟 New Features in v2.0
+
+### ✨ Dark Mode Toggle
+- Toggle between light and dark modes with a simple button in the sidebar
+- Beautifully themed styling for both modes
+- Persistent theme selection during your session
+
+### 📋 Extended Features
+1. **🏃 Activity Tracker** - Track weekly exercise (150 min goal)
+2. **💧 Water Intake Tracker** - Daily hydration monitoring (8 glasses goal)
+3. **😴 Sleep Tracker** - Monitor sleep quality and duration
+4. **🔥 Calorie Calculator** - Calculate BMR and daily calorie needs with macro breakdown
+
+## 📋 Original Features
 
 ### 1. **🩺 Diabetes Predictor (ML-Based)**
 - Input 8 health metrics (Pregnancies, Glucose, Blood Pressure, Skin Thickness, Insulin, BMI, Diabetes Pedigree Function, Age)
@@ -35,12 +48,17 @@ A comprehensive health prediction and analysis application built with Python, St
 - Includes user inputs, predictions, and recommendations
 - Easy download with timestamp
 
-### 6. **Professional UI/UX**
-- Sidebar navigation with 5 main sections
+### 6. **🌙 Dark Mode (NEW)**
+- Professional dark theme for extended usage
+- Eye-friendly color schemes
+- One-click toggle in sidebar
+
+### 7. **Professional UI/UX**
+- Sidebar navigation with 9 main sections
 - Emoji-enhanced user interface
 - Color-coded health status indicators
 - Medical disclaimer footer
-- Responsive design
+- Responsive design with HTML enhancement
 
 ---
 
@@ -74,7 +92,7 @@ The app will open in your browser (usually at `http://localhost:8501`).
 
 ```
 AiBimatic/
-├── app.py              # Main Streamlit application (700+ lines)
+├── app.py              # Main Streamlit application (1400+ lines)
 ├── diabetes.csv        # Sample dataset (15 rows of training data)
 ├── requirements.txt    # Python dependencies
 └── README.md          # This file
@@ -86,11 +104,12 @@ AiBimatic/
 
 | Technology | Purpose |
 |-----------|---------|
-| **Streamlit** | Interactive Web UI |
+| **Streamlit** | Interactive Web UI with Dark Mode |
 | **Scikit-learn** | Machine Learning (Random Forest) |
 | **Pandas** | Data manipulation & analysis |
 | **NumPy** | Numerical computing |
 | **Matplotlib** | Data visualization |
+| **HTML/CSS** | Enhanced UI styling |
 
 ---
 
@@ -114,6 +133,11 @@ The dataset contains 15 sample records with the following columns:
 
 ## 💡 How to Use
 
+### Dark Mode Toggle
+1. Look in the sidebar at the top
+2. Click the 🌙 (moon) button for dark mode or ☀️ (sun) for light mode
+3. Theme updates instantly!
+
 ### Diabetes Predictor
 1. Navigate to "🩺 Diabetes Predictor" from the sidebar
 2. Enter your health metrics in the input fields
@@ -134,6 +158,31 @@ The dataset contains 15 sample records with the following columns:
 3. Click "Calculate BMI"
 4. See your category and recommendations
 5. Download your BMI report
+
+### Activity Tracker (NEW)
+1. Go to "🏃 Activity Tracker"
+2. Enter minutes of exercise this week (goal: 150 min)
+3. See your progress with visual indicators
+4. Get personalized activity recommendations
+
+### Water Intake (NEW)
+1. Select "💧 Water Intake"
+2. Set glasses consumed today (goal: 8 glasses)
+3. View hydration level with visual tracker
+4. Learn about hydration benefits
+
+### Sleep Tracker (NEW)
+1. Go to "😴 Sleep Tracker"
+2. Enter hours of sleep last night
+3. See sleep quality assessment
+4. Get tips for better sleep
+
+### Calorie Calculator (NEW)
+1. Navigate to "🔥 Calorie Calculator"
+2. Enter weight, height, age, gender, activity level
+3. View BMR and daily calorie needs
+4. See macro nutrient breakdown
+5. Get weight management goals
 
 ### Dashboard
 1. View "📊 Dashboard" for insights
@@ -160,6 +209,7 @@ In case of medical emergency, seek immediate medical attention.
 - **Prediction Time**: < 100ms per prediction
 - **Responsive**: Works on desktop and mobile devices
 - **Error Handling**: Validates all inputs and provides helpful error messages
+- **Theming**: Dynamic light/dark mode with instant switching
 
 ---
 
@@ -202,6 +252,11 @@ In case of medical emergency, seek immediate medical attention.
 - Results cached automatically for faster subsequent uses
 - Force refresh with `Ctrl+R` or `Cmd+R`
 
+### Dark Mode Not Working
+- Try refreshing the page (F5 or Ctrl+R)
+- Close and reopen the browser
+- Check browser compatibility
+
 ---
 
 ## 📈 Future Enhancements
@@ -213,6 +268,9 @@ In case of medical emergency, seek immediate medical attention.
 - API backend for integration
 - Multi-language support
 - Integration with fitness trackers
+- Wearable device sync
+- Social sharing features
+- Prescription reminders
 
 ---
 
@@ -236,10 +294,23 @@ This project is created for hackathon purposes. Feel free to modify and use for 
 
 Built with ❤️ for the Hackathon | Python Data Science Expert
 
-**Version**: 1.0  
-**Last Updated**: 2024  
+**Version**: 2.0 (Enhanced with Dark Mode & Activity Tracking)
+**Last Updated**: February 2026  
 **Status**: Production Ready
 
 ---
 
-**Enjoy your Smart Health Tracker! 🏥**
+## 🎉 What's New in v2.0
+
+✨ Dark Mode with instant theme switching
+✨ Activity Tracker with weekly goals
+✨ Water Intake Monitor with visual progress
+✨ Sleep Quality Tracker
+✨ Calorie Calculator with BMR and macro breakdown
+✨ Enhanced HTML/CSS styling
+✨ Improved UI responsiveness
+✨ Better color coding for light and dark modes
+
+---
+
+**Enjoy your Enhanced Smart Health Tracker! 🏥**

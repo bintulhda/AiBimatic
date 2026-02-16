@@ -24,43 +24,206 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for better styling
-st.markdown("""
-    <style>
-    .main-title {
-        text-align: center;
-        color: #1f77b4;
-        margin-bottom: 2rem;
-    }
-    .metric-card {
-        background-color: #f0f2f6;
-        padding: 20px;
-        border-radius: 10px;
-        margin: 10px 0;
-    }
-    .warning-box {
-        background-color: #fff3cd;
-        padding: 15px;
-        border-left: 4px solid #ffc107;
-        border-radius: 5px;
-        margin: 10px 0;
-    }
-    .success-box {
-        background-color: #d4edda;
-        padding: 15px;
-        border-left: 4px solid #28a745;
-        border-radius: 5px;
-        margin: 10px 0;
-    }
-    .danger-box {
-        background-color: #f8d7da;
-        padding: 15px;
-        border-left: 4px solid #dc3545;
-        border-radius: 5px;
-        margin: 10px 0;
-    }
-    </style>
-""", unsafe_allow_html=True)
+# ============================================================================
+# DARK MODE INITIALIZATION
+# ============================================================================
+
+if 'dark_mode' not in st.session_state:
+    st.session_state.dark_mode = False
+
+# Dynamic CSS for light and dark modes
+def get_css_theme():
+    if st.session_state.dark_mode:
+        return """
+        <style>
+        :root {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --accent: #00d4ff;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #f44336;
+            --info: #2196f3;
+        }
+        
+        .main-title {
+            text-align: center;
+            color: #00d4ff;
+            margin-bottom: 2rem;
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #2d2d2d 0%, #1f1f1f 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border: 1px solid #404040;
+            color: #ffffff;
+        }
+        
+        .warning-box {
+            background-color: rgba(255, 152, 0, 0.1);
+            padding: 15px;
+            border-left: 4px solid #ff9800;
+            border-radius: 5px;
+            margin: 10px 0;
+            color: #ffb74d;
+        }
+        
+        .success-box {
+            background-color: rgba(76, 175, 80, 0.1);
+            padding: 15px;
+            border-left: 4px solid #4caf50;
+            border-radius: 5px;
+            margin: 10px 0;
+            color: #81c784;
+        }
+        
+        .danger-box {
+            background-color: rgba(244, 67, 54, 0.1);
+            padding: 15px;
+            border-left: 4px solid #f44336;
+            border-radius: 5px;
+            margin: 10px 0;
+            color: #ef5350;
+        }
+        
+        .info-box {
+            background-color: rgba(33, 150, 243, 0.1);
+            padding: 15px;
+            border-left: 4px solid #2196f3;
+            border-radius: 5px;
+            margin: 10px 0;
+            color: #64b5f6;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #2d2d2d 0%, #253238 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 1px solid #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+            color: #ffffff;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-item {
+            background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        </style>
+        """
+    else:
+        return """
+        <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --text-primary: #000000;
+            --text-secondary: #666666;
+            --accent: #1f77b4;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+        }
+        
+        .main-title {
+            text-align: center;
+            color: #1f77b4;
+            margin-bottom: 2rem;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        
+        .metric-card {
+            background-color: #f0f2f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .warning-box {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            border-radius: 5px;
+            margin: 10px 0;
+            color: #856404;
+        }
+        
+        .success-box {
+            background-color: #d4edda;
+            padding: 15px;
+            border-left: 4px solid #28a745;
+            border-radius: 5px;
+            margin: 10px 0;
+            color: #155724;
+        }
+        
+        .danger-box {
+            background-color: #f8d7da;
+            padding: 15px;
+            border-left: 4px solid #dc3545;
+            border-radius: 5px;
+            margin: 10px 0;
+            color: #721c24;
+        }
+        
+        .info-box {
+            background-color: #d1ecf1;
+            padding: 15px;
+            border-left: 4px solid #17a2b8;
+            border-radius: 5px;
+            margin: 10px 0;
+            color: #0c5460;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #1f77b4;
+            box-shadow: 0 4px 15px rgba(31, 119, 180, 0.1);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-item {
+            background: linear-gradient(135deg, #1f77b4 0%, #1464a8 100%);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        </style>
+        """
+
+st.markdown(get_css_theme(), unsafe_allow_html=True)
 
 # ============================================================================
 # MODEL TRAINING & INITIALIZATION
@@ -229,24 +392,93 @@ professional medical advice before making any health-related decisions.
     return report
 
 
+def track_water_intake(current_intake, goal=8):
+    """Track daily water intake and provide recommendations"""
+    percentage = (current_intake / goal) * 100
+    status = "✅ Goal Reached!" if current_intake >= goal else f"🚰 {goal - current_intake} glasses left"
+    return percentage, status
+
+
+def track_activity(minutes_exercised, goal=150):
+    """Track weekly exercise and provide recommendations"""
+    percentage = (minutes_exercised / goal) * 100
+    status = "✅ Weekly Goal Reached!" if minutes_exercised >= goal else f"⏱️ {goal - minutes_exercised} min left"
+    return percentage, status
+
+
+def track_sleep(hours_slept, goal=8):
+    """Track sleep duration and provide recommendations"""
+    percentage = (hours_slept / goal) * 100
+    quality = ""
+    if hours_slept < 5:
+        quality = "Poor - Get more rest!"
+    elif hours_slept < 7:
+        quality = "Fair - Try to get more sleep"
+    elif hours_slept <= 9:
+        quality = "Good - Keep it up!"
+    else:
+        quality = "Excellent - Perfect sleep!"
+    return percentage, quality
+
+
+def calculate_calorie_needs(weight, height, age, gender, activity_level):
+    """Calculate daily calorie needs using Mifflin-St Jeor equation"""
+    if gender.lower() == "male":
+        bmr = 10 * weight + 6.25 * height - 5 * age + 5
+    else:
+        bmr = 10 * weight + 6.25 * height - 5 * age - 161
+    
+    activity_multipliers = {
+        "Sedentary": 1.2,
+        "Lightly Active": 1.375,
+        "Moderately Active": 1.55,
+        "Very Active": 1.725,
+        "Extremely Active": 1.9
+    }
+    
+    daily_calories = bmr * activity_multipliers.get(activity_level, 1.55)
+    return bmr, daily_calories
+
+
 # ============================================================================
-# SIDEBAR NAVIGATION
+# SIDEBAR NAVIGATION & DARK MODE TOGGLE
 # ============================================================================
 
 st.sidebar.markdown("## 🏥 Navigation")
+
+# Dark mode toggle
+col1, col2 = st.sidebar.columns([3, 1])
+with col1:
+    st.sidebar.markdown("**Dark Mode**")
+with col2:
+    if st.sidebar.button("🌙" if not st.session_state.dark_mode else "☀️", key="theme_toggle"):
+        st.session_state.dark_mode = not st.session_state.dark_mode
+        st.rerun()
+
+st.sidebar.markdown("---")
+
 page = st.sidebar.radio(
     "Select a feature:",
     ["🏠 Home", "🩺 Diabetes Predictor", "❤️ Blood Pressure Analysis", 
-     "⚖️ BMI Calculator", "📊 Dashboard"]
+     "⚖️ BMI Calculator", "📊 Dashboard", "🏃 Activity Tracker", 
+     "💧 Water Intake", "😴 Sleep Tracker", "🔥 Calorie Calculator"]
 )
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("""
+### 🎯 Quick Stats
+Track your daily health metrics:
+- **💧 Water Intake**: Stay hydrated!
+- **🏃 Exercise**: 150 min/week goal
+- **😴 Sleep**: 7-9 hours recommended
+- **🔥 Calories**: Personalized needs
+
 ### About This App
 This Smart Health Tracker helps you monitor your health using:
 - **Machine Learning** for diabetes prediction
 - **Rule-based Logic** for BP analysis
 - **Data Visualization** for insights
+- **Activity Tracking** for wellness
 
 ⚠️ **Disclaimer:** This is NOT medical advice. Always consult a healthcare professional.
 """)
@@ -795,17 +1027,293 @@ elif page == "📊 Dashboard":
         st.error("Cannot load dashboard. Please check diabetes.csv file.")
 
 # ============================================================================
+# ACTIVITY TRACKER PAGE
+# ============================================================================
+
+elif page == "🏃 Activity Tracker":
+    st.markdown("<h1 class='main-title'>🏃 Weekly Activity Tracker</h1>", unsafe_allow_html=True)
+    
+    st.info("📊 Track your exercise progress towards your weekly goal of 150 minutes")
+    
+    minutes_exercised = st.slider("Minutes of exercise this week", 0, 300, 75, step=15)
+    
+    percentage, status = track_activity(minutes_exercised, goal=150)
+    
+    col1, col2 = st.columns([1, 1])
+    
+    with col1:
+        st.metric("Weekly Progress", f"{minutes_exercised}/150 min", f"{percentage:.0f}%")
+    
+    with col2:
+        st.markdown(f"<div class='feature-card'><h3>{status}</h3></div>", unsafe_allow_html=True)
+    
+    # Progress bar using HTML
+    st.markdown(f"""
+    <div style='width: 100%; background-color: #e0e0e0; border-radius: 10px; overflow: hidden; margin: 20px 0;'>
+        <div style='width: {min(percentage, 100)}%; height: 30px; background: linear-gradient(90deg, #4caf50 0%, #81c784 100%); 
+                    display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;'>
+            {percentage:.0f}%
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Activity recommendations
+    st.markdown("---")
+    st.markdown("#### 📋 Exercise Recommendations")
+    
+    if minutes_exercised < 75:
+        st.markdown("""<div class='danger-box'>
+        <h4>⚠️ Low Activity</h4>
+        Try to increase your activity level! Start with:
+        - 30 min walks 5 days a week
+        - Light strength training 2 days a week
+        </div>""", unsafe_allow_html=True)
+    elif minutes_exercised < 150:
+        st.markdown("""<div class='warning-box'>
+        <h4>📈 Getting There!</h4>
+        You're on the right track! Continue with:
+        - Consistent daily movement
+        - Mix cardio and strength training
+        </div>""", unsafe_allow_html=True)
+    else:
+        st.markdown("""<div class='success-box'>
+        <h4>✅ Goal Achieved!</h4>
+        Great job maintaining your fitness! 
+        - Keep up the excellent work
+        - Consider increasing intensity for more benefits
+        </div>""", unsafe_allow_html=True)
+
+# ============================================================================
+# WATER INTAKE TRACKER PAGE
+# ============================================================================
+
+elif page == "💧 Water Intake":
+    st.markdown("<h1 class='main-title'>💧 Daily Water Intake Tracker</h1>", unsafe_allow_html=True)
+    
+    st.info("💡 Stay hydrated! Aim for 8 glasses of water per day")
+    
+    glasses_consumed = st.slider("Glasses of water consumed today", 0, 16, 4, step=1)
+    
+    percentage, status = track_water_intake(glasses_consumed, goal=8)
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.metric("Daily Progress", f"{glasses_consumed}/8", f"{min(percentage, 100):.0f}%")
+    
+    with col2:
+        remaining = max(0, 8 - glasses_consumed)
+        st.metric("Water Needed", f"{remaining} glasses")
+    
+    with col3:
+        st.markdown(f"<div class='feature-card' style='text-align: center;'><h3>{status}</h3></div>", unsafe_allow_html=True)
+    
+    # Visual water tracker
+    st.markdown("---")
+    st.markdown("#### 🥤 Hydration Level")
+    
+    hydration_html = '<div class="stats-grid">'
+    for i in range(1, 9):
+        if i <= glasses_consumed:
+            hydration_html += '<div class="stat-item" style="background: linear-gradient(135deg, #1e88e5 0%, #42a5f5 100%);"><h3>💧</h3></div>'
+        else:
+            hydration_html += '<div class="stat-item" style="background: #e0e0e0; color: #999;"><h3>💧</h3></div>'
+    hydration_html += '</div>'
+    
+    st.markdown(hydration_html, unsafe_allow_html=True)
+    
+    # Health benefits
+    st.markdown("---")
+    st.markdown("#### 🏥 Benefits of Staying Hydrated")
+    st.markdown("""
+    - ✅ Improves energy and focus
+    - ✅ Aids digestion
+    - ✅ Regulates body temperature
+    - ✅ Supports healthy skin
+    - ✅ Enhances athletic performance
+    """)
+
+# ============================================================================
+# SLEEP TRACKER PAGE
+# ============================================================================
+
+elif page == "😴 Sleep Tracker":
+    st.markdown("<h1 class='main-title'>😴 Sleep Tracker</h1>", unsafe_allow_html=True)
+    
+    st.info("💤 Track your sleep and ensure you get the recommended 7-9 hours per night")
+    
+    hours_slept = st.slider("Hours of sleep last night", 0.0, 12.0, 7.0, step=0.5)
+    
+    percentage, quality = track_sleep(hours_slept, goal=8)
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.metric("Sleep Duration", f"{hours_slept:.1f} hours")
+    
+    with col2:
+        st.metric("Goal Progress", f"{percentage:.0f}%")
+    
+    with col3:
+        st.markdown(f"<div class='feature-card' style='text-align: center;'><h3>{quality}</h3></div>", unsafe_allow_html=True)
+    
+    # Sleep quality gauge
+    st.markdown("---")
+    st.markdown("#### 📊 Sleep Quality")
+    
+    if hours_slept < 5:
+        color, emoji = "#f44336", "😴"
+    elif hours_slept < 7:
+        color, emoji = "#ff9800", "😕"
+    elif hours_slept <= 9:
+        color, emoji = "#4caf50", "😊"
+    else:
+        color, emoji = "#2196f3", "😴"
+    
+    st.markdown(f"""
+    <div style='width: 100%; background-color: #e0e0e0; border-radius: 10px; overflow: hidden; margin: 20px 0;'>
+        <div style='width: {min((hours_slept/9)*100, 100)}%; height: 40px; background-color: {color}; 
+                    display: flex; align-items: center; justify-content: center; font-size: 24px;'>
+            {emoji}
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Sleep recommendations
+    st.markdown("---")
+    st.markdown("#### 💡 Sleep Tips")
+    st.markdown("""
+    **Recommended Sleep:** 7-9 hours per night
+    
+    **Better Sleep Habits:**
+    - 🕐 Keep a consistent sleep schedule
+    - 📵 Avoid screens 1 hour before bed
+    - 🌙 Keep your bedroom cool and dark
+    - ☕ Limit caffeine after 2 PM
+    - 🧘 Try relaxation techniques
+    - 🏃 Exercise regularly (but not before bed)
+    """)
+
+# ============================================================================
+# CALORIE CALCULATOR PAGE
+# ============================================================================
+
+elif page == "🔥 Calorie Calculator":
+    st.markdown("<h1 class='main-title'>🔥 Daily Calorie Needs Calculator</h1>", unsafe_allow_html=True)
+    
+    st.info("📊 Calculate your daily calorie needs based on your profile")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        weight_kg = st.number_input("Weight (kg)", min_value=1.0, max_value=300.0, value=70.0)
+        height_cm = st.number_input("Height (cm)", min_value=1.0, max_value=250.0, value=175.0)
+    
+    with col2:
+        age = st.number_input("Age (years)", min_value=1, max_value=150, value=30)
+        gender = st.selectbox("Gender", ["Male", "Female"])
+    
+    activity_level = st.selectbox(
+        "Activity Level",
+        ["Sedentary", "Lightly Active", "Moderately Active", "Very Active", "Extremely Active"]
+    )
+    
+    if st.button("🔢 Calculate Calories", use_container_width=True):
+        bmr, daily_calories = calculate_calorie_needs(weight_kg, height_cm, age, gender, activity_level)
+        
+        st.markdown("---")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown(f"""
+            <div class='feature-card'>
+            <h3>🔥 Basal Metabolic Rate (BMR)</h3>
+            <h2 style='color: #ff6b6b;'>{bmr:.0f} calories</h2>
+            <p>Calories burned at rest per day</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown(f"""
+            <div class='feature-card'>
+            <h3>⚡ Daily Calorie Needs</h3>
+            <h2 style='color: #4caf50;'>{daily_calories:.0f} calories</h2>
+            <p>With {activity_level} activity level</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        # Goal breakdown
+        st.markdown("---")
+        st.markdown("#### 🎯 Calorie Goals")
+        
+        goals_data = {
+            "Goal": ["Weight Loss", "Maintain Weight", "Weight Gain"],
+            "Daily Calories": [f"{daily_calories * 0.85:.0f}", f"{daily_calories:.0f}", f"{daily_calories * 1.15:.0f}"],
+            "Weekly Change": ["-0.5 kg", "Stable", "+0.5 kg"]
+        }
+        
+        goals_df = pd.DataFrame(goals_data)
+        st.table(goals_df)
+        
+        # Macro breakdown
+        st.markdown("---")
+        st.markdown("#### 🥗 Macro Nutrient Breakdown (Balanced Diet)")
+        
+        protein_cals = daily_calories * 0.30
+        carbs_cals = daily_calories * 0.45
+        fats_cals = daily_calories * 0.25
+        
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.markdown(f"""
+            <div class='feature-card' style='background: linear-gradient(135deg, #ff6b6b 0%, #ef5350 100%);'>
+            <h3>🍗 Protein</h3>
+            <h2>{protein_cals:.0f}</h2>
+            <p>{protein_cals/4:.0f}g per day</p>
+            <p style='font-size: 12px;'>30% of calories</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col2:
+            st.markdown(f"""
+            <div class='feature-card' style='background: linear-gradient(135deg, #ffa726 0%, #ff9800 100%);'>
+            <h3>🍞 Carbs</h3>
+            <h2>{carbs_cals:.0f}</h2>
+            <p>{carbs_cals/4:.0f}g per day</p>
+            <p style='font-size: 12px;'>45% of calories</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col3:
+            st.markdown(f"""
+            <div class='feature-card' style='background: linear-gradient(135deg, #66bb6a 0%, #4caf50 100%);'>
+            <h3>🥑 Fats</h3>
+            <h2>{fats_cals:.0f}</h2>
+            <p>{fats_cals/9:.0f}g per day</p>
+            <p style='font-size: 12px;'>25% of calories</p>
+            </div>
+            """, unsafe_allow_html=True)
+
+# ============================================================================
 # FOOTER
 # ============================================================================
 
 st.markdown("---")
 st.markdown("""
-<div style='text-align: center; color: #666; font-size: 12px; margin-top: 2rem;'>
+<div style='text-align: center; padding: 20px; border-radius: 10px;'>
+<p style='font-size: 12px; color: #666;'>
 ⚠️ <b>DISCLAIMER:</b> This application is for informational purposes only and does NOT 
 constitute medical advice. The predictions and analyses are not professional medical diagnoses. 
 Always consult a qualified healthcare professional for accurate medical guidance. 
 In case of medical emergency, seek immediate medical attention.
-<br><br>
-<i>Smart Health Tracker v1.0 | © 2024 | Built with ❤️</i>
+</p>
+<p style='font-size: 11px; color: #999; margin-top: 15px;'>
+<b>Features:</b> 🩺 Diabetes Predictor | ❤️ BP Analysis | ⚖️ BMI Calculator | 🏃 Activity Tracking | 💧 Water Intake | 😴 Sleep Tracker | 🔥 Calorie Calculator | 🌙 Dark Mode
+</p>
+<p style='font-size: 12px; color: #666;'>
+<i>Smart Health Tracker v2.0 | Enhanced with Dark Mode & Activity Tracking | © 2026 | Built with ❤️ using Streamlit</i>
+</p>
 </div>
 """, unsafe_allow_html=True)
