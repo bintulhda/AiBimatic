@@ -686,6 +686,11 @@ page = st.sidebar.radio(
     label_visibility="collapsed"
 )
 
+# Handle page override from card clicks
+if "page_override" in st.session_state:
+    page = st.session_state.page_override
+    del st.session_state.page_override
+
 st.sidebar.markdown("---")
 st.sidebar.markdown("""
 <div style='background: rgba(0, 242, 255, 0.05); backdrop-filter: blur(10px); 
@@ -743,7 +748,7 @@ if page == "🏠 Home":
     
     with col1:
         st.markdown("""
-        <div class='glass-card' style='text-align: center; cursor: pointer; transition: all 0.3s ease;'>
+        <div class='glass-card' style='text-align: center;'>
             <div style='font-size: 3em; margin-bottom: 15px;'>🩺</div>
             <h3 style='color: #00f2ff; margin-top: 0; text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);'>
                 Diabetes Predictor
@@ -751,15 +756,15 @@ if page == "🏠 Home":
             <p style='color: #b0b0b0; font-size: 0.95em;'>
                 AI-powered risk assessment using machine learning
             </p>
-            <div style='margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0, 242, 255, 0.1);'>
-                <span style='color: #00f2ff; font-weight: 600;'>→ Analyze Now</span>
-            </div>
         </div>
         """, unsafe_allow_html=True)
+        if st.button("🩺 Analyze Now", key="diabetes_btn", use_container_width=True):
+            st.session_state.page_override = "🩺 Diabetes Predictor"
+            st.rerun()
     
     with col2:
         st.markdown("""
-        <div class='glass-card' style='text-align: center; cursor: pointer; transition: all 0.3s ease;'>
+        <div class='glass-card' style='text-align: center;'>
             <div style='font-size: 3em; margin-bottom: 15px;'>❤️</div>
             <h3 style='color: #ff0055; margin-top: 0; text-shadow: 0 0 10px rgba(255, 0, 85, 0.5);'>
                 Blood Pressure
@@ -767,15 +772,15 @@ if page == "🏠 Home":
             <p style='color: #b0b0b0; font-size: 0.95em;'>
                 Real-time BP monitoring & instant categorization
             </p>
-            <div style='margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0, 242, 255, 0.1);'>
-                <span style='color: #ff0055; font-weight: 600;'>→ Check Now</span>
-            </div>
         </div>
         """, unsafe_allow_html=True)
+        if st.button("❤️ Check Now", key="bp_btn", use_container_width=True):
+            st.session_state.page_override = "❤️ Blood Pressure Analysis"
+            st.rerun()
     
     with col3:
         st.markdown("""
-        <div class='glass-card' style='text-align: center; cursor: pointer; transition: all 0.3s ease;'>
+        <div class='glass-card' style='text-align: center;'>
             <div style='font-size: 3em; margin-bottom: 15px;'>⚖️</div>
             <h3 style='color: #00f2ff; margin-top: 0; text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);'>
                 BMI Calculator
@@ -783,11 +788,11 @@ if page == "🏠 Home":
             <p style='color: #b0b0b0; font-size: 0.95em;'>
                 Calculate & track your body mass index
             </p>
-            <div style='margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0, 242, 255, 0.1);'>
-                <span style='color: #00f2ff; font-weight: 600;'>→ Calculate</span>
-            </div>
         </div>
         """, unsafe_allow_html=True)
+        if st.button("⚖️ Calculate", key="bmi_btn", use_container_width=True):
+            st.session_state.page_override = "⚖️ BMI Calculator"
+            st.rerun()
     
     st.markdown("<br><br>", unsafe_allow_html=True)
     
